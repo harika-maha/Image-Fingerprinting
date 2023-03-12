@@ -1,9 +1,13 @@
 # Import dependencies
 from PIL import Image
-import imagehash
 import os
 import matplotlib.pyplot as plt
 from flask import Flask, render_template, request, url_for
+# import simpleHashingNew
+import simpleHFunc
+import sys
+sys.path.append("/Users/sridhararunachalam/Desktop/MiniProject/static/")
+
 
 # similar = []
 # hash_keys = dict()
@@ -50,6 +54,15 @@ from flask import Flask, render_template, request, url_for
 # print(hash_keys)
 
 app = Flask(__name__)
+
+imgs = "./static"
+files_list = os.listdir(imgs)
+# print(len(files_list))
+print(files_list[3])
+print("Hello")
+
+FOLDER = os.path.join('static')
+app.config['UPLOAD_FOLDER'] = FOLDER
  
  
 @app.route("/")
@@ -59,33 +72,51 @@ def index():
 
 @app.route('/form', methods=["GET","POST"])
 def redirect():
-    return render_template("redirect.html")
+    fil = request.form.get("img1")
+    print(fil)
+    listDiff = simpleHFunc.dHashing(fil)
+    print("---------------------------------------")
+    imglist = []
+    for i in range(len(listDiff)):
+        idx = listDiff[i]
+        print(idx)
+        print(i)
+        print(files_list[idx])
+        imglist.append(files_list[idx])
+        print(imglist[i])
 
-def dPhashing():
-# Create the Hash Object of the first image
-    HDBatmanPHash = imagehash.phash(Image.open('/Users/sridhararunachalam/Desktop/MiniProject/test_images/img1.jpg'))
-    print('Batman HD Picture: ' + str(HDBatmanPHash))
-
-    HDBatmanDHash = imagehash.dhash(Image.open('/Users/sridhararunachalam/Desktop/MiniProject/test_images/img1.jpg'))
-    print('D-Hash: '+ str(HDBatmanDHash))
-
-# Create the Hash Object of the second image
-    SDBatmanPHash = imagehash.phash(Image.open('/Users/sridhararunachalam/Desktop/MiniProject/test_images/bluejacket.jpg'))
-    print('Batman HD Picture: ' + str(SDBatmanPHash))
-
-    SDBatmanDHash = imagehash.dhash(Image.open('/Users/sridhararunachalam/Desktop/MiniProject/test_images/bluejacket.jpg'))
-    print('D-Hash: '+ str(SDBatmanDHash))
+        
+    print(imglist)
+    fullfil = os.path.join(app.config['UPLOAD_FOLDER'], fil)
+    print(fullfil)
+    return render_template("redirect.html", imglist = imglist)
 
 
-    print(HDBatmanPHash - SDBatmanPHash)
-    print(HDBatmanDHash - SDBatmanDHash)
-# Compare hashes to determine whether the pictures are the same or not
-    if(HDBatmanPHash == SDBatmanPHash):
-        print("The pictures are perceptually the same !")
-    elif(HDBatmanPHash - SDBatmanPHash<20):
-        print("The pictures are kinda similar :)" + str(HDBatmanPHash-SDBatmanPHash))
-    else:
-        print("The pictures are different, distance: " + str(HDBatmanPHash - SDBatmanPHash))
+# def dPhashing():
+# # Create the Hash Object of the first image
+#     HDBatmanPHash = imagehash.phash(Image.open('/Users/sridhararunachalam/Desktop/MiniProject/test_images/img1.jpg'))
+#     print('Batman HD Picture: ' + str(HDBatmanPHash))
+
+#     HDBatmanDHash = imagehash.dhash(Image.open('/Users/sridhararunachalam/Desktop/MiniProject/test_images/img1.jpg'))
+#     print('D-Hash: '+ str(HDBatmanDHash))
+
+# # Create the Hash Object of the second image
+#     SDBatmanPHash = imagehash.phash(Image.open('/Users/sridhararunachalam/Desktop/MiniProject/test_images/bluejacket.jpg'))
+#     print('Batman HD Picture: ' + str(SDBatmanPHash))
+
+#     SDBatmanDHash = imagehash.dhash(Image.open('/Users/sridhararunachalam/Desktop/MiniProject/test_images/bluejacket.jpg'))
+#     print('D-Hash: '+ str(SDBatmanDHash))
+
+
+#     print(HDBatmanPHash - SDBatmanPHash)
+#     print(HDBatmanDHash - SDBatmanDHash)
+# # Compare hashes to determine whether the pictures are the same or not
+#     if(HDBatmanPHash == SDBatmanPHash):
+#         print("The pictures are perceptually the same !")
+#     elif(HDBatmanPHash - SDBatmanPHash<20):
+#         print("The pictures are kinda similar :)" + str(HDBatmanPHash-SDBatmanPHash))
+#     else:
+#         print("The pictures are different, distance: " + str(HDBatmanPHash - SDBatmanPHash))
 
 if __name__ == "__main__":
     app.run()

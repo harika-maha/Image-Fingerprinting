@@ -7,7 +7,7 @@ from PIL import Image
 import os
 import imagehash
 
-imgs = "./test_images"
+imgs = "./static"
 files_list = os.listdir(imgs)
 print(len(files_list))
 
@@ -20,8 +20,8 @@ def is_jpg(file_path):
 
 duplicates = []
 hash_keys = dict()
-path = "/Users/sridhararunachalam/Desktop/MiniProject/test_images/"
-for index, filename in enumerate(os.listdir('./test_images')):  #listdir('.') = current directory
+path = "/Users/sridhararunachalam/Desktop/MiniProject/static/"
+for index, filename in enumerate(os.listdir('./static')):  #listdir('.') = current directory
     # print(filename)
     # if os.path.isfile(filename):
     #     print(filename)

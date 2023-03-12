@@ -12,5 +12,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="" />
   </head>
-  <body>done!</body>
+  <body>
+    {%for img in imglist%}
+    <img
+      src="/Users/sridhararunachalam/Desktop/MiniProject/static/{{ img }}"
+      align="middle"
+      height="50px"
+      width="50px"
+    />
+    {%endfor%}
+    <h5>done!</h5>
+  </body>
 </html>
